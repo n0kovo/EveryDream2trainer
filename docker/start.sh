@@ -43,9 +43,9 @@ tensorboard --logdir /workspace/EveryDream2trainer/logs --host 0.0.0.0 --port=${
 if [[ -v JUPYTER_PASSWORD ]]; then
     jupyter nbextension enable --py widgetsnbextension
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
-    jupyter lab --allow-root --no-browser --port=${JUPYTER_PORT:-8888} --ip=* \
+    jupyter lab --allow-root --no-browser --port=${JUPYTER_PORT:-8888} --ip='*' \
         --ServerApp.terminado_settings='{"shell_command":["/bin/bash"]}' \
-        --ServerApp.token=$JUPYTER_PASSWORD --ServerApp.allow_origin=* \
+        --ServerApp.token=$JUPYTER_PASSWORD --ServerApp.allow_origin='*' \
         --ServerApp.preferred_dir=/workspace/EveryDream2trainer
 else
     echo "Container Started"
