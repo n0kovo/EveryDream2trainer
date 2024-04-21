@@ -89,7 +89,9 @@ WORKDIR /workspace
 ARG CACHEBUST=1
 RUN git clone -b openpai https://github.com/n0kovo/EveryDream2trainer
 
-ADD /workspace/EveryDream2trainer/docker/welcome.txt /
-ADD /workspace/EveryDream2trainer/docker/start.sh /
+WORKDIR /workspace/EveryDream2trainer
+
+ADD welcome.txt /
+ADD start.sh /
 RUN chmod +x /start.sh
 CMD [ "/start.sh" ]
