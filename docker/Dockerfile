@@ -1,6 +1,6 @@
 ###################
 # Builder Stage
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS builder
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS builder
 LABEL org.opencontainers.image.licenses="AGPL-3.0-only"
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -32,13 +32,12 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ADD requirements-build.txt /build
 RUN --mount=type=cache,target=/root/.cache/pip \
     python3 -m venv ${VIRTUAL_ENV} && \
-    pip install -U -I torch==2.1.0+cu121 torchvision==0.16.0+cu121 --extra-index-url "https://download.pytorch.org/whl/cu121" && \
+    pip install -U -I torch==2.1.0 torchvision==0.16.0 xformers --index-url "https://download.pytorch.org/whl/cu118" && \
     pip install -r requirements-build.txt && \
-    pip install --no-deps xformers==0.0.22.post7
 
 ###################
 # Runtime Stage
-FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04 as runtime
+FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04 as runtime
 
 # Use bash shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -77,9 +76,7 @@ RUN echo "source ${VIRTUAL_ENV}/bin/activate" >> /root/.bashrc
 # Workaround for:
 #   https://github.com/TimDettmers/bitsandbytes/issues/62
 #   https://github.com/TimDettmers/bitsandbytes/issues/73
-ENV LD_LIBRARY_PATH="/usr/local/cuda-12.1/targets/x86_64-linux/lib/"
-#RUN ln /usr/local/cuda/targets/x86_64-linux/lib/libcudart.so.12.1.55 /usr/local/cuda-12.1/targets/x86_64-linux/lib/libcudart.so
-#RUN ln /usr/local/cuda/targets/x86_64-linux/lib/libnvrtc.so.12.1.55 /usr/local/cuda-12.1/targets/x86_64-linux/lib/libnvrtc.so.12.1.55
+ENV LD_LIBRARY_PATH="/usr/local/cuda-11.8/targets/x86_64-linux/lib/"
 
 # Vast.ai SSH ignores ENV vars unless fully exported
 # Exporting anything with an _ should cover the bases
@@ -90,11 +87,9 @@ RUN pip install --no-cache-dir -r requirements-runtime.txt
 
 WORKDIR /workspace
 ARG CACHEBUST=1
-RUN git clone https://github.com/victorchall/EveryDream2trainer
+RUN git clone -b openpai https://github.com/n0kovo/EveryDream2trainer
 
-WORKDIR /workspace/EveryDream2trainer
-
-ADD welcome.txt /
-ADD start.sh /
+ADD /workspace/EveryDream2trainer/docker/welcome.txt /
+ADD /workspace/EveryDream2trainer/docker/start.sh /
 RUN chmod +x /start.sh
 CMD [ "/start.sh" ]
