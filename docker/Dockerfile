@@ -33,7 +33,7 @@ ADD requirements-build.txt /build
 RUN --mount=type=cache,target=/root/.cache/pip \
     python3 -m venv ${VIRTUAL_ENV} && \
     pip install -U -I torch==2.1.0 torchvision==0.16.0 xformers --index-url "https://download.pytorch.org/whl/cu118" && \
-    pip install -r requirements-build.txt && \
+    pip install -r requirements-build.txt
 
 ###################
 # Runtime Stage
