@@ -23,7 +23,7 @@ if [[ -v PAI_JOB_NAME ]]; then
 fi
 
 if [[ ! -f "v2-inference-v.yaml" ]]; then
-    python utils/get_yamls.py
+    python EveryDream2trainer/utils/get_yamls.py
 fi
 
 mkdir -p logs input
