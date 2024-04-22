@@ -20,7 +20,7 @@ if [[ -v PAI_JOB_NAME ]]; then
     setup_openpai_environment
 fi
 
-if [[ ! -f "v2-inference-v.yaml" ]]; then
+if [[ ! -f "v1-inference-v.yaml" ]]; then
     python /workspace/EveryDream2trainer/utils/get_yamls.py
 fi
 
