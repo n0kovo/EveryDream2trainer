@@ -54,8 +54,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt update && apt install -y --no-install-recommends \
         wget bash curl git git-lfs vim tmux \
-        build-essential lsb-release \
-        python3-pip python3-venv \
+        zsh aria2 coreutils file rsync \
+        psmisc iproute2 iputils-ping \
+        net-tools unzip locales fd-find \
+        build-essential lsb-release tar \
+        python3-pip python3-venv ripgrep \
         openssh-server \
         gnupg ca-certificates && \
     update-ca-certificates && \
