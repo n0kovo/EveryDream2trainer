@@ -8,10 +8,8 @@ setup_openpai_environment() {
     export IN_PAI=true
     
     # Dynamically get the ports for Jupyter and Tensorboard
-    local jupyter_port_var="PAI_PORT_LIST_${PAI_CURRENT_TASK_ROLE_NAME}_${PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX}_jupyter_lab_http"
-    local tensorboard_port_var="PAI_PORT_LIST_${PAI_CURRENT_TASK_ROLE_NAME}_${PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX}_tensorboard_http"
-    export JUPYTER_PORT=${!jupyter_port_var}
-    export TENSORBOARD_PORT=${!tensorboard_port_var}
+    export JUPYTER_PORT=$PAI_CONTAINER_HOST_jupyter_lab_http_PORT_LIST
+    export TENSORBOARD_PORT=$PAI_CONTAINER_HOST_tensorboard_http_PORT_LIST
 
     # Check if SSH is configured in PAI (TODO: Is this the right condition?)
     [[ -n "$PAI_CONTAINER_SSH_PORT" ]] && export PAI_SSH=true
@@ -40,12 +38,14 @@ fi
 tensorboard --logdir /workspace/EveryDream2trainer/logs --host 0.0.0.0 --port=${TENSORBOARD_PORT:-6006} &
 
 # Conditionally start JupyterLab
-if [[ -v JUPYTER_PASSWORD ]]; then
+if [[ -v JUPYTER_PASSWD ]]; then
+    export jupyter_passwd=$JUPYTER_PASSWD
+    export jupyter_passwd_hash=`python3 -c "import os;from IPython.lib.security import passwd; print(passwd(passphrase=os.environ['jupyter_passwd'], algorithm='sha1'))"`
     jupyter nbextension enable --py widgetsnbextension
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
     jupyter lab --allow-root --no-browser --port=${JUPYTER_PORT:-8888} --ip='*' \
         --ServerApp.terminado_settings='{"shell_command":["/bin/bash"]}' \
-        --ServerApp.token=$JUPYTER_PASSWORD --ServerApp.allow_origin='*' \
+        --NotebookApp.password=$jupyter_passwd_hash --ServerApp.allow_origin='*' \
         --ServerApp.preferred_dir=/workspace/EveryDream2trainer
 else
     echo "Container Started"
