@@ -24,7 +24,7 @@ if [[ ! -f "v1-inference-v.yaml" ]]; then
     python /workspace/EveryDream2trainer/utils/get_yamls.py
 fi
 
-mkdir -p logs input
+mkdir -p EveryDream2trainer/logs EveryDream2trainer/input
 
 # Configure SSH if a public key is provided and not running in PAI SSH
 if [[ -v PUBLIC_KEY && ! -d "${HOME}/.ssh" && ! -v PAI_SSH ]]; then
