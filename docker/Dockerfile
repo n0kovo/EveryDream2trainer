@@ -89,7 +89,7 @@ WORKDIR /workspace
 ARG CACHEBUST=1
 RUN git clone -b openpai https://github.com/n0kovo/EveryDream2trainer
 
-WORKDIR /workspace/EveryDream2trainer
+WORKDIR /workspace
 
 ADD welcome.txt /
 ADD start.sh /

@@ -1,6 +1,8 @@
 aiohttp==3.8.4
 bitsandbytes==0.43.0
+sentencepiece
 scipy
+accelerate
 colorama==0.4.6
 compel~=1.1.3
 ftfy==6.1.1
