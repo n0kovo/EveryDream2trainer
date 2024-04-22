@@ -8,7 +8,7 @@ setup_openpai_environment() {
     export IN_PAI=true
     
     # Dynamically get the ports for Jupyter and Tensorboard
-    local jupyter_port_var="PAI_PORT_LIST_${PAI_CURRENT_TASK_ROLE_NAME}_${PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX}_jupyter_http"
+    local jupyter_port_var="PAI_PORT_LIST_${PAI_CURRENT_TASK_ROLE_NAME}_${PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX}_jupyter_lab_http"
     local tensorboard_port_var="PAI_PORT_LIST_${PAI_CURRENT_TASK_ROLE_NAME}_${PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX}_tensorboard_http"
     export JUPYTER_PORT=${!jupyter_port_var}
     export TENSORBOARD_PORT=${!tensorboard_port_var}
@@ -23,7 +23,7 @@ if [[ -v PAI_JOB_NAME ]]; then
 fi
 
 if [[ ! -f "v2-inference-v.yaml" ]]; then
-    python EveryDream2trainer/utils/get_yamls.py
+    python /workspace/EveryDream2trainer/utils/get_yamls.py
 fi
 
 mkdir -p logs input
